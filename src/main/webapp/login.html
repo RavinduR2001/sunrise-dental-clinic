@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sunrise Dental</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            width: 380px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo .icon {
+            font-size: 50px;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 24px;
+            margin: 10px 0 5px;
+        }
+
+        .logo p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-login:hover {
+            background: #5a67d8;
+        }
+
+        .error-msg {
+            background: #fee;
+            color: #c33;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .demo-info {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background: #f0f2ff;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="login-box">
+    <div class="logo">
+        <div class="icon">🦷</div>
+        <h1>Sunrise Dental Clinic</h1>
+        <p>Staff Login</p>
+    </div>
+
+    <div id="errorMsg" class="error-msg"></div>
+
+    <form id="loginForm">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="username" placeholder="Enter username" required>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter password" required>
+        </div>
+
+        <button type="submit" class="btn-login">Login</button>
+    </form>
+
+    <div class="demo-info">
+        <strong>Demo Login:</strong><br>
+        Username: <b>admin</b><br>
+        Password: <b>admin123</b>
+    </div>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var username = document.getElementById('username').value.trim();
+        var password = document.getElementById('password').value.trim();
+        var errorMsg = document.getElementById('errorMsg');
+
+        // Hide error message
+        errorMsg.style.display = 'none';
+
+        console.log('Username:', username);
+        console.log('Password:', password);
+
+        // Check if empty
+        if (!username || !password) {
+            errorMsg.textContent = 'Please enter username and password';
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        // Simple authentication
+        if (username === 'admin' && password === 'admin123') {
+            console.log('Login successful');
+
+            // Save to sessionStorage
+            sessionStorage.setItem('isLoggedIn', 'true');
+            sessionStorage.setItem('username', 'admin');
+            sessionStorage.setItem('fullName', 'Administrator');
+
+            // Show success message
+            errorMsg.style.background = '#efe';
+            errorMsg.style.color = '#3a3';
+            errorMsg.textContent = 'Login successful! Redirecting...';
+            errorMsg.style.display = 'block';
+
+            // Redirect after 1 second
+            setTimeout(function() {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+
+        } else if (username === 'receptionist1' && password === 'pass123') {
+            console.log('Login successful (receptionist)');
+
+            sessionStorage.setItem('isLoggedIn', 'true');
+            sessionStorage.setItem('username', 'receptionist1');
+            sessionStorage.setItem('fullName', 'Sarah Johnson');
+
+            errorMsg.style.background = '#efe';
+            errorMsg.style.color = '#3a3';
+            errorMsg.textContent = 'Login successful! Redirecting...';
+            errorMsg.style.display = 'block';
+
+            setTimeout(function() {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+
+        } else {
+            console.log('Login failed');
+            errorMsg.style.background = '#fee';
+            errorMsg.style.color = '#c33';
+            errorMsg.textContent = 'Invalid username or password!';
+            errorMsg.style.display = 'block';
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Appointment - Sunrise Dental</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f6fa; }
+
+        header {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 { color: #667eea; font-size: 24px; }
+        .btn-logout {
+            padding: 8px 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .treatment-checkboxes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .treatment-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .treatment-option:hover {
+            background: #e8eaff;
+        }
+
+        .treatment-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .treatment-option label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .total-display {
+            background: #e8eaff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .btn-submit {
+            background: #667eea;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+            .treatment-checkboxes { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🦷 Sunrise Dental Clinic</h1>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+    <h2 style="margin-bottom: 20px;">Register New Appointment</h2>
+
+    <div id="message" class="message"></div>
+
+    <div class="form-container">
+        <form id="appointmentForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Appointment Number</label>
+                    <input type="text" id="appointmentNumber" readonly
+                           style="background: #f5f5f5;" value="">
+                </div>
+
+                <div class="form-group">
+                    <label>Patient Name *</label>
+                    <input type="text" id="patientName" required
+                           placeholder="Enter full name">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Address *</label>
+                <textarea id="patientAddress" rows="3" required
+                          placeholder="Enter complete address"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="patientPhone" required
+                           placeholder="0771234567" pattern="[0-9]{10}">
+                </div>
+
+                <div class="form-group">
+                    <label>Email (Optional)</label>
+                    <input type="email" id="patientEmail"
+                           placeholder="example@email.com">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Select Dentist *</label>
+                    <select id="dentistId" required>
+                        <option value="">Choose Dentist</option>
+                        <option value="1">Dr. Kamal Perera - General Dentistry</option>
+                        <option value="2">Dr. Nimali Silva - Orthodontics</option>
+                        <option value="3">Dr. Ruwan Fernando - Oral Surgery</option>
+                        <option value="4">Dr. Priya Kumar - Pediatric Dentistry</option>
+                        <option value="5">Dr. Asanka Wijesinghe - Periodontics</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Appointment Date *</label>
+                    <input type="date" id="appointmentDate" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Appointment Time *</label>
+                    <input type="time" id="appointmentTime" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes (Optional)</label>
+                    <input type="text" id="notes" placeholder="Any special instructions">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Select Treatments * (Choose one or more)</label>
+                <div class="treatment-checkboxes" id="treatmentList">
+                    <!-- Treatments will be loaded here -->
+                </div>
+            </div>
+
+            <div class="total-display" id="totalDisplay">
+                Total Cost: Rs. 0.00
+            </div>
+
+            <button type="submit" class="btn-submit" style="margin-top: 20px;">
+                💾 Save Appointment to Database
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Generate appointment number
+    function generateAppointmentNumber() {
+        const year = new Date().getFullYear();
+        const random = Math.floor(Math.random() * 9000 + 1000);
+        return 'APT-' + year + '-' + random;
+    }
+
+    // Set appointment number and date
+    document.getElementById('appointmentNumber').value = generateAppointmentNumber();
+    document.getElementById('appointmentDate').min = new Date().toISOString().split('T')[0];
+
+    // Treatment data (in production, load from database)
+    const treatments = [
+        { id: 1, name: 'General Checkup', cost: 2000 },
+        { id: 2, name: 'Teeth Cleaning', cost: 3500 },
+        { id: 3, name: 'Tooth Filling', cost: 5000 },
+        { id: 4, name: 'Root Canal', cost: 15000 },
+        { id: 5, name: 'Tooth Extraction', cost: 8000 },
+        { id: 6, name: 'Dental Crown', cost: 25000 },
+        { id: 7, name: 'Teeth Whitening', cost: 12000 },
+        { id: 8, name: 'Braces', cost: 45000 },
+        { id: 9, name: 'Dental Implant', cost: 75000 },
+        { id: 10, name: 'X-Ray', cost: 1500 }
+    ];
+
+    // Load treatments
+    function loadTreatments() {
+        const container = document.getElementById('treatmentList');
+        treatments.forEach(treatment => {
+            const div = document.createElement('div');
+            div.className = 'treatment-option';
+            div.innerHTML = `
+                    <input type="checkbox" id="treatment_${treatment.id}"
+                           value="${treatment.id}" onchange="updateTotal()">
+                    <label for="treatment_${treatment.id}">
+                        ${treatment.name} - Rs. ${treatment.cost.toFixed(2)}
+                    </label>
+                `;
+            container.appendChild(div);
+        });
+    }
+
+    // Update total cost
+    function updateTotal() {
+        let total = 0;
+        treatments.forEach(treatment => {
+            const checkbox = document.getElementById('treatment_' + treatment.id);
+            if (checkbox && checkbox.checked) {
+                total += treatment.cost;
+            }
+        });
+        document.getElementById('totalDisplay').textContent =
+            'Total Cost: Rs. ' + total.toFixed(2);
+    }
+
+    // Handle form submission
+    document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const messageDiv = document.getElementById('message');
+        messageDiv.style.display = 'none';
+        messageDiv.className = 'message';
+
+        // Get selected treatments
+        const selectedTreatments = [];
+        treatments.forEach(treatment => {
+            const checkbox = document.getElementById('treatment_' + treatment.id);
+            if (checkbox && checkbox.checked) {
+                selectedTreatments.push(treatment.id);
+            }
+        });
+
+        // Validate
+        if (selectedTreatments.length === 0) {
+            messageDiv.className = 'message error';
+            messageDiv.textContent = '⚠️ Please select at least one treatment';
+            messageDiv.style.display = 'block';
+            return;
+        }
+
+        // Prepare data
+        const data = {
+            appointmentNumber: document.getElementById('appointmentNumber').value,
+            patientName: document.getElementById('patientName').value,
+            patientAddress: document.getElementById('patientAddress').value,
+            patientPhone: document.getElementById('patientPhone').value,
+            patientEmail: document.getElementById('patientEmail').value,
+            dentistId: parseInt(document.getElementById('dentistId').value),
+            appointmentDate: document.getElementById('appointmentDate').value,
+            appointmentTime: document.getElementById('appointmentTime').value,
+            notes: document.getElementById('notes').value,
+            treatmentIds: selectedTreatments
+        };
+
+        console.log('Sending data:', data);
+
+        // Show loading
+        messageDiv.className = 'message';
+        messageDiv.textContent = '⏳ Saving to database...';
+        messageDiv.style.display = 'block';
+        messageDiv.style.background = '#fff3cd';
+        messageDiv.style.color = '#856404';
+
+        try {
+            const response = await fetch('api/appointments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            console.log('Response:', result);
+
+            if (result.success) {
+                messageDiv.className = 'message success';
+                messageDiv.textContent = '✅ Appointment saved successfully! Appointment Number: ' +
+                    data.appointmentNumber;
+                messageDiv.style.display = 'block';
+
+                // Reset form
+                document.getElementById('appointmentForm').reset();
+                document.getElementById('appointmentNumber').value = generateAppointmentNumber();
+                document.getElementById('totalDisplay').textContent = 'Total Cost: Rs. 0.00';
+            } else {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = '❌ ' + (result.message || 'Failed to save');
+                messageDiv.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            messageDiv.className = 'message error';
+            messageDiv.textContent = '❌ Server not available. Please try again.';
+            messageDiv.style.display = 'block';
+        }
+    });
+
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+    }
+
+    // Load treatments on page load
+    loadTreatments();
+</script>
+</body>
+</html>

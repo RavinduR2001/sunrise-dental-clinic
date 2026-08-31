@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Appointment - Sunrise Dental</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f6fa;
+        }
+
+        header {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-logout {
+            padding: 8px 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-logout:hover {
+            background: #c82333;
+        }
+
+        .container {
+            display: flex;
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 25px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 15px;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #e8eaff;
+            color: #667eea;
+            border-left-color: #667eea;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            flex: 1;
+        }
+
+        .main-content h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        .btn-search {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn-search:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .result-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .result-header h3 {
+            color: #667eea;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .detail-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .detail-item label {
+            display: block;
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .detail-item span {
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status-scheduled {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .no-result {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .no-result .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🦷 Sunrise Dental Clinic</h1>
+    <div class="user-info">
+        <span id="username" style="color: #555; font-weight: 500;"></span>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+</header>
+
+<div class="container">
+    <nav class="sidebar">
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="register.html">📝 New Appointment</a>
+        <a href="search.html" class="active">🔍 Search Patient</a>
+        <a href="billing.html">💰 Billing</a>
+        <a href="help.html">❓ Help</a>
+    </nav>
+
+    <main class="main-content">
+        <h2>Search Appointment Details</h2>
+
+        <div class="search-container">
+            <div class="search-box">
+                <div class="form-group">
+                    <label for="searchInput">Enter Appointment Number</label>
+                    <input type="text" id="searchInput"
+                           placeholder="e.g., APT-2024-001">
+                </div>
+                <button class="btn-search" onclick="searchAppointment()">🔍 Search</button>
+            </div>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <div class="result-container" id="resultContainer">
+            <div class="result-header">
+                <h3>Appointment Details</h3>
+                <p>Appointment Number: <strong id="rAppointmentNumber"></strong></p>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <label>Patient Name</label>
+                    <span id="rPatientName"></span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Contact Number</label>
+                    <span id="rPatientPhone"></span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Address</label>
+                    <span id="rPatientAddress"></span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Email</label>
+                    <span id="rPatientEmail"></span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Dentist</label>
+                    <span id="rDentistName"></span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Treatment</label>
+                    <span id="rTreatmentName"></span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Appointment Date</label>
+                    <span id="rAppointmentDate"></span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Appointment Time</label>
+                    <span id="rAppointmentTime"></span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Status</label>
+                    <span id="rStatus"></span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Notes</label>
+                    <span id="rNotes"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-result" id="noResult" style="display: none;">
+            <div class="icon">🔍</div>
+            <h3>No Appointment Found</h3>
+            <p>Please enter a valid appointment number</p>
+        </div>
+    </main>
+</div>
+
+<script>
+    // Check authentication
+    if (!sessionStorage.getItem('username')) {
+        window.location.href = 'login.html';
+    }
+
+    document.getElementById('username').textContent =
+        'Welcome, ' + sessionStorage.getItem('username');
+
+    function searchAppointment() {
+        const searchValue = document.getElementById('searchInput').value.trim();
+        const errorDiv = document.getElementById('errorMessage');
+        const resultContainer = document.getElementById('resultContainer');
+        const noResult = document.getElementById('noResult');
+
+        errorDiv.style.display = 'none';
+        resultContainer.style.display = 'none';
+        noResult.style.display = 'none';
+
+        if (!searchValue) {
+            errorDiv.textContent = 'Please enter an appointment number';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        // Demo data - replace with actual API call
+        const demoData = {
+            appointmentNumber: searchValue,
+            patientName: 'John Doe',
+            patientPhone: '0771234567',
+            patientAddress: '123 Main Street, Colombo 03',
+            patientEmail: 'john@email.com',
+            dentistName: 'Dr. Kamal Perera',
+            treatmentName: 'General Checkup',
+            appointmentDate: '2024-03-15',
+            appointmentTime: '10:30',
+            status: 'SCHEDULED',
+            notes: 'Regular checkup'
+        };
+
+        // Display results
+        document.getElementById('rAppointmentNumber').textContent = demoData.appointmentNumber;
+        document.getElementById('rPatientName').textContent = demoData.patientName;
+        document.getElementById('rPatientPhone').textContent = demoData.patientPhone;
+        document.getElementById('rPatientAddress').textContent = demoData.patientAddress;
+        document.getElementById('rPatientEmail').textContent = demoData.patientEmail || 'N/A';
+        document.getElementById('rDentistName').textContent = demoData.dentistName;
+        document.getElementById('rTreatmentName').textContent = demoData.treatmentName;
+        document.getElementById('rAppointmentDate').textContent = demoData.appointmentDate;
+        document.getElementById('rAppointmentTime').textContent = demoData.appointmentTime;
+
+        const statusSpan = document.getElementById('rStatus');
+        statusSpan.textContent = demoData.status;
+        statusSpan.className = 'status-badge status-scheduled';
+
+        document.getElementById('rNotes').textContent = demoData.notes || 'No notes';
+
+        resultContainer.style.display = 'block';
+    }
+
+    // Allow Enter key to search
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchAppointment();
+        }
+    });
+
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+    }
+</script>
+</body>
+</html>

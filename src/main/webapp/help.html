@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Sunrise Dental</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f6fa;
+        }
+
+        header {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-logout {
+            padding: 8px 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .container {
+            display: flex;
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 25px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 15px;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #e8eaff;
+            color: #667eea;
+            border-left-color: #667eea;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            flex: 1;
+        }
+
+        .main-content h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .help-container {
+            max-width: 900px;
+        }
+
+        .help-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .help-section h3 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .help-section ol,
+        .help-section ul {
+            padding-left: 25px;
+        }
+
+        .help-section li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .help-section li strong {
+            color: #333;
+        }
+
+        .tip-box {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .tip-box p {
+            color: #0066cc;
+            font-size: 14px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .warning-box p {
+            color: #856404;
+            font-size: 14px;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .faq-answer {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🦷 Sunrise Dental Clinic</h1>
+    <div class="user-info">
+        <span id="username" style="color: #555; font-weight: 500;"></span>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+</header>
+
+<div class="container">
+    <nav class="sidebar">
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="register.html">📝 New Appointment</a>
+        <a href="search.html">🔍 Search Patient</a>
+        <a href="billing.html">💰 Billing</a>
+        <a href="help.html" class="active">❓ Help</a>
+    </nav>
+
+    <main class="main-content">
+        <h2>Help & User Guide</h2>
+
+        <div class="help-container">
+            <!-- Getting Started -->
+            <div class="help-section">
+                <h3>🚀 Getting Started</h3>
+                <ol>
+                    <li><strong>Login:</strong> Use your assigned username and password to access the system</li>
+                    <li><strong>Dashboard:</strong> After login, you'll see the main dashboard with quick access to all features</li>
+                    <li><strong>Navigation:</strong> Use the sidebar menu to navigate between different sections</li>
+                </ol>
+                <div class="tip-box">
+                    <p>💡 <strong>Tip:</strong> Always remember to log out after finishing your work, especially on shared computers.</p>
+                </div>
+            </div>
+
+            <!-- Registering Appointments -->
+            <div class="help-section">
+                <h3>📝 Registering New Appointments</h3>
+                <ol>
+                    <li>Click on <strong>"New Appointment"</strong> in the sidebar menu</li>
+                    <li>The <strong>Appointment Number</strong> is auto-generated - don't modify it</li>
+                    <li>Enter the <strong>Patient's Full Name</strong></li>
+                    <li>Enter the complete <strong>Address</strong></li>
+                    <li>Enter a valid <strong>10-digit Contact Number</strong></li>
+                    <li>Enter <strong>Email</strong> (optional but recommended)</li>
+                    <li>Select the <strong>Dentist</strong> from dropdown</li>
+                    <li>Choose the <strong>Treatment Type</strong></li>
+                    <li>Select <strong>Appointment Date</strong> (cannot be in the past)</li>
+                    <li>Select <strong>Appointment Time</strong></li>
+                    <li>Add any <strong>Notes</strong> (optional)</li>
+                    <li>Click <strong>"Register Appointment"</strong></li>
+                </ol>
+                <div class="warning-box">
+                    <p>⚠️ <strong>Note:</strong> All fields marked with * are required. Double-check patient information before submitting.</p>
+                </div>
+            </div>
+
+            <!-- Searching Appointments -->
+            <div class="help-section">
+                <h3>🔍 Searching for Appointments</h3>
+                <ol>
+                    <li>Go to <strong>"Search Patient"</strong> section</li>
+                    <li>Enter the <strong>Appointment Number</strong></li>
+                    <li>Click <strong>"Search"</strong> button</li>
+                    <li>View complete appointment details in the results</li>
+                </ol>
+                <div class="tip-box">
+                    <p>💡 <strong>Tip:</strong> Appointment numbers follow the format: APT-YYYY-XXX (e.g., APT-2024-001)</p>
+                </div>
+            </div>
+
+            <!-- Billing -->
+            <div class="help-section">
+                <h3>💰 Generating Bills</h3>
+                <ol>
+                    <li>Go to <strong>"Billing"</strong> section</li>
+                    <li>Enter the <strong>Appointment Number</strong></li>
+                    <li>Click <strong>"Generate Bill"</strong></li>
+                    <li>Review the bill details carefully</li>
+                    <li>Click <strong>"Print Bill"</strong> to print the receipt</li>
+                </ol>
+                <div class="tip-box">
+                    <p>💡 <strong>Tip:</strong> Bills include consultation fee (Rs. 500), treatment cost, and 8% tax.</p>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="help-section">
+                <h3>❓ Frequently Asked Questions</h3>
+
+                <div class="faq-item">
+                    <p class="faq-question">Q: What if I forget my password?</p>
+                    <p class="faq-answer">A: Contact the system administrator to reset your password. For security reasons, passwords cannot be reset by users themselves.</p>
+                </div>
+
+                <div class="faq-item">
+                    <p class="faq-question">Q: Can I cancel an appointment?</p>
+                    <p class="faq-answer">A: Yes, search for the appointment and update its status to "Cancelled". Contact the patient to inform them.</p>
+                </div>
+
+                <div class="faq-item">
+                    <p class="faq-question">Q: How do I handle emergency appointments?</p>
+                    <p class="faq-answer">A: Register the appointment as normal and add a note indicating it's an emergency. Inform the dentist immediately.</p>
+                </div>
+
+                <div class="faq-item">
+                    <p class="faq-question">Q: What should I do if the system is slow?</p>
+                    <p class="faq-answer">A: Close unnecessary browser tabs, clear browser cache, or contact IT support if the issue persists.</p>
+                </div>
+            </div>
+
+            <!-- Common Issues -->
+            <div class="help-section">
+                <h3>⚠️ Common Issues & Solutions</h3>
+                <ul>
+                    <li><strong>Login Failed:</strong> Ensure caps lock is off and try again. Contact admin if issue persists.</li>
+                    <li><strong>Duplicate Appointment Number:</strong> Refresh the page to generate a new number.</li>
+                    <li><strong>Data Not Found:</strong> Verify the appointment number is correct and try again.</li>
+                    <li><strong>Print Not Working:</strong> Check printer connection and browser print settings.</li>
+                </ul>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="help-section">
+                <h3>📞 Contact Support</h3>
+                <div class="contact-info">
+                    <p>📧 <strong>Email:</strong> support@sunrisedental.lk</p>
+                    <p>📱 <strong>Phone:</strong> 011-2345678 (Ext: 100)</p>
+                    <p>🕐 <strong>Hours:</strong> Monday - Friday, 8:00 AM - 6:00 PM</p>
+                    <p>🏢 <strong>Location:</strong> IT Department, 2nd Floor, Sunrise Dental Clinic</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // Check authentication
+    if (!sessionStorage.getItem('username')) {
+        window.location.href = 'login.html';
+    }
+
+    document.getElementById('username').textContent =
+        'Welcome, ' + sessionStorage.getItem('username');
+
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing - Sunrise Dental</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f6fa;
+        }
+
+        header {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-logout {
+            padding: 8px 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .container {
+            display: flex;
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 25px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 15px;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #e8eaff;
+            color: #667eea;
+            border-left-color: #667eea;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            flex: 1;
+        }
+
+        .main-content h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .billing-search {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-generate {
+            padding: 12px 30px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn-generate:hover {
+            background: #218838;
+        }
+
+        .bill-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .bill-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .bill-header h3 {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .bill-header p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .bill-details {
+            margin-bottom: 30px;
+        }
+
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .bill-row label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .bill-row span {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .bill-items {
+            margin: 20px 0;
+        }
+
+        .bill-items table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .bill-items th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .bill-items td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+
+        .bill-items td:last-child {
+            text-align: right;
+        }
+
+        .bill-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #667eea;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 18px;
+        }
+
+        .total-row.grand-total {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 22px;
+        }
+
+        .bill-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .print-button {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn-print {
+            padding: 12px 40px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-print:hover {
+            background: #5a67d8;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .bill-container,
+            .bill-container * {
+                visibility: visible;
+            }
+
+            .bill-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+            }
+
+            .print-button,
+            .billing-search,
+            .sidebar,
+            header {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🦷 Sunrise Dental Clinic</h1>
+    <div class="user-info">
+        <span id="username" style="color: #555; font-weight: 500;"></span>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+</header>
+
+<div class="container">
+    <nav class="sidebar">
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="register.html">📝 New Appointment</a>
+        <a href="search.html">🔍 Search Patient</a>
+        <a href="billing.html" class="active">💰 Billing</a>
+        <a href="help.html">❓ Help</a>
+    </nav>
+
+    <main class="main-content">
+        <h2>Generate Bill / Receipt</h2>
+
+        <div class="billing-search">
+            <div class="search-box">
+                <div class="form-group">
+                    <label for="billSearchInput">Enter Appointment Number</label>
+                    <input type="text" id="billSearchInput"
+                           placeholder="e.g., APT-2024-001">
+                </div>
+                <button class="btn-generate" onclick="generateBill()">💰 Generate Bill</button>
+            </div>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <div class="bill-container" id="billContainer">
+            <div class="bill-header">
+                <h3>🦷 Sunrise Dental Clinic</h3>
+                <p>123 Galle Road, Colombo 03</p>
+                <p>Tel: 011-2345678 | Email: info@sunrisedental.lk</p>
+                <h4 style="margin-top: 15px; color: #333;">PATIENT BILL / RECEIPT</h4>
+            </div>
+
+            <div class="bill-details">
+                <div class="bill-row">
+                    <label>Bill Number:</label>
+                    <span id="bBillNumber"></span>
+                </div>
+                <div class="bill-row">
+                    <label>Date:</label>
+                    <span id="bDate"></span>
+                </div>
+                <div class="bill-row">
+                    <label>Appointment Number:</label>
+                    <span id="bAppointmentNumber"></span>
+                </div>
+                <div class="bill-row">
+                    <label>Patient Name:</label>
+                    <span id="bPatientName"></span>
+                </div>
+                <div class="bill-row">
+                    <label>Dentist:</label>
+                    <span id="bDentistName"></span>
+                </div>
+            </div>
+
+            <div class="bill-items">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount (Rs.)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td id="bTreatmentName">Treatment</td>
+                        <td id="bTreatmentCost">0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Consultation Fee</td>
+                        <td>500.00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bill-total">
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span id="bSubtotal">0.00</span>
+                </div>
+                <div class="total-row">
+                    <span>Tax (8%):</span>
+                    <span id="bTax">0.00</span>
+                </div>
+                <div class="total-row">
+                    <span>Discount:</span>
+                    <span id="bDiscount">0.00</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total Amount:</span>
+                    <span id="bTotal">0.00</span>
+                </div>
+            </div>
+
+            <div class="bill-footer">
+                <p>Thank you for choosing Sunrise Dental Clinic!</p>
+                <p>This is a computer-generated receipt</p>
+                <p>Payment Status: <strong id="bPaymentStatus">PENDING</strong></p>
+            </div>
+
+            <div class="print-button">
+                <button class="btn-print" onclick="window.print()">🖨️ Print Bill</button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // Check authentication
+    if (!sessionStorage.getItem('username')) {
+        window.location.href = 'login.html';
+    }
+
+    document.getElementById('username').textContent =
+        'Welcome, ' + sessionStorage.getItem('username');
+
+    function generateBill() {
+        const searchValue = document.getElementById('billSearchInput').value.trim();
+        const errorDiv = document.getElementById('errorMessage');
+        const billContainer = document.getElementById('billContainer');
+
+        errorDiv.style.display = 'none';
+        billContainer.style.display = 'none';
+
+        if (!searchValue) {
+            errorDiv.textContent = 'Please enter an appointment number';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        // Demo data - replace with actual API call
+        const treatmentCost = 2000.00;
+        const consultationFee = 500.00;
+        const subtotal = treatmentCost + consultationFee;
+        const tax = subtotal * 0.08;
+        const discount = 0;
+        const total = subtotal + tax - discount;
+
+        const today = new Date().toLocaleDateString('en-LK', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Populate bill
+        document.getElementById('bBillNumber').textContent = 'BILL-' + Date.now();
+        document.getElementById('bDate').textContent = today;
+        document.getElementById('bAppointmentNumber').textContent = searchValue;
+        document.getElementById('bPatientName').textContent = 'John Doe';
+        document.getElementById('bDentistName').textContent = 'Dr. Kamal Perera';
+        document.getElementById('bTreatmentName').textContent = 'General Checkup';
+        document.getElementById('bTreatmentCost').textContent = treatmentCost.toFixed(2);
+        document.getElementById('bSubtotal').textContent = subtotal.toFixed(2);
+        document.getElementById('bTax').textContent = tax.toFixed(2);
+        document.getElementById('bDiscount').textContent = discount.toFixed(2);
+        document.getElementById('bTotal').textContent = 'Rs. ' + total.toFixed(2);
+
+        billContainer.style.display = 'block';
+    }
+
+    // Allow Enter key
+    document.getElementById('billSearchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            generateBill();
+        }
+    });
+
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+    }
+</script>
+</body>
+</html>
